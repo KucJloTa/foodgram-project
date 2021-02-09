@@ -13,7 +13,6 @@ class RecipeAdmin(admin.ModelAdmin):
         'author',
         'title',
         'text',
-        'ingredients',
         'cooking_time',
         'pub_date'
     )

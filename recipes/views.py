@@ -3,23 +3,24 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.http import FileResponse
+from django.http import FileResponse, QueryDict
 from django.db.models import Count, Sum
+
 
 from .models import Recipe, Tag
 from .forms import RecipeForm
-from .utils import save_recipe, edit_recipe, generate_pdf
+#from .utils import save_recipe, edit_recipe, generate_pdf
 
 
 User = get_user_model()
-TAGS = ['breakfast', 'lunch', 'dinner']
+TAGS = ['Завтрак', 'Обед', 'Ужин']
 
 
 def index(request):
     """
     Display most recent 'recipes.Recipe', filtered with tagsm 6 per page
     """
-    tags = request.GET.getList('tag', TAGS)
+    tags = request.GET.getlist('tag', TAGS)
     all_tags = Tag.objects.all()
 
     recipes = Recipe.objects.filter(
@@ -30,13 +31,13 @@ def index(request):
         'tags'
     ).distinct()
 
-    paginator = Paginator(recipes, settings.PAGINATION_PAGE_SIZE)
+    paginator = Paginator(recipes, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
 
     return render(
         request,
-        'recipes/index.html',
+        'indexNotAuth.html',
         {
             'page': page,
             'paginator': paginator,
@@ -90,39 +91,39 @@ def recipe_new(request):
     return render(request, 'recipes/formRecipe.html', {'form': form})
 
 
-@login_required
-def recipe_edit(request, recipe_id, slug):
-    """
-    GET: Display a form for editing of existing 'recipes.Recipe'.
+# @login_required
+# def recipe_edit(request, recipe_id, slug):
+#     """
+#     GET: Display a form for editing of existing 'recipes.Recipe'.
 
-    POST: Validate and save the form to database.
-    On successful save redirect to 'recipe_view_slug' page
-    of created 'recipes.Recipe'.
-    Otherwise stay on page and show validation errors.
-    """
-    recipe = get_object_or_404(Recipe, id=recipe_id)
-    if not request.user.is_superuser:
-        if request.user != recipe.author:
-            return redirect(
-                'recipe_view_slug', recipe_id=recipe_id, slug=recipe.slug
-            )
+#     POST: Validate and save the form to database.
+#     On successful save redirect to 'recipe_view_slug' page
+#     of created 'recipes.Recipe'.
+#     Otherwise stay on page and show validation errors.
+#     """
+#     recipe = get_object_or_404(Recipe, id=recipe_id)
+#     if not request.user.is_superuser:
+#         if request.user != recipe.author:
+#             return redirect(
+#                 'recipe_view_slug', recipe_id=recipe_id, slug=recipe.slug
+#             )
     
-    form = RecipeForm(
-        request.POST or None,
-        files=request.FILES or None,
-        isinstance=recipe
-    )
-    if form.is_valid():
-        edit_recipe(request, form, instance=recipe)
-        recipe redirect(
-            'recipe_view_slug', recipe_id=recipe_id, slug=recipe.slug
-        )
+#     form = RecipeForm(
+#         request.POST or None,
+#         files=request.FILES or None,
+#         isinstance=recipe
+#     )
+#     if form.is_valid():
+#         edit_recipe(request, form, instance=recipe),
+#         recipe redirect(
+#             'recipe_view_slug', recipe_id=recipe_id, slug=recipe.slug
+#         )
     
-    return render(
-        request,
-        'recipes/formRecipe.html',
-        {'form': form, 'recipe': recipe}
-    )
+#     return render(
+#         request,
+#         'recipes/formRecipe.html',
+#         {'form': form, 'recipe': recipe}
+#     )
 
 
 @login_required
@@ -140,7 +141,7 @@ def profile_view(request, username):
     """
     Display all 'recipes.Recipe' of a given 'auth.User', filtered with tags, 6 per page.
     """
-    tags = request.GET.getList('tag', TAGS)
+    tags = request.GET.getlist('tag', TAGS)
     all_tags = Tag.objects.all()
 
     author = get_object_or_404(User, username=username)
@@ -197,7 +198,7 @@ def favorites(request):
     Display all 'recipes.Recipe' that visitor had marked as favorite,
     filtered with tags, 6 peg page.
     """
-    tags = request.GET.getList('tag', TAGS)
+    tags = request.GET.getlist('tag', TAGS)
     all_tags = Tag.objects.all()
 
     recipes = Recipe.objects.filter(
