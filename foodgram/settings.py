@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'sorl.thumbnail',
     'rest_framework',
     'django_filters',
+    'api',
     'recipes',
     'users',
 ]
