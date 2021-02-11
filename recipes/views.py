@@ -18,24 +18,22 @@ def index(request):
     Отображает самые последние рецепты с тегами 6 шт на странице
     """
     recipes = Recipe.objects.all()
-    tags_query, tags_lst = get_tags(request)
+    tags_qs, tags_from_get = get_tags(request)
+# "Фильтрация по рецептов по тэгам повторяется между вьюхами - давай оформим отдельной функцией"
+# - не понял, фильтр же разный, зачем выносить в отдельную вьюху? не очень понял этот момент, а главное как?))
+    if tags_qs:
+        recipes = Recipe.objects.filter(tags__slug__in=tags_qs).distinct()
 
-    if tags_query:
-        recipes = Recipe.objects.filter(tags__slug__in=tags_query).distinct()
+#    tag_recipe_filter(tags_qs)
 
     paginator = Paginator(recipes, ITEMS_FOR_PAGINATOR)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-
     return render(
         request,
         'recipes/index.html',
-        {
-            'recipes': recipes,
-            'paginator': paginator,
-            'page': page,
-            'tags': tags_lst
-        }
+        {'recipes': recipes, 'paginator': paginator,
+         'page': page, 'tags': tags_from_get}
     )
 
 
@@ -47,22 +45,16 @@ def new_recipe(request):
     POST: Если форма валидная сохранит рецепт в базу, если нет покажет ошибки
     """
     form = RecipeForm(request.POST or None, files=request.FILES or None)
+#"В нескольких вьюхах в контекст шаблона отдаются все тэги - можно оформить кастомным темплейт фильтром или контекст процессором"
+#Расскажи пжл поподробнее свою логику)
     tags = Tag.objects.all()
 
     if form.is_valid():
-        recipe = form.save(commit=False)
         ingredients = get_ingredients(request.POST)
         save_recipe(recipe, ingredients, request)
-        form.save_m2m()
         return redirect('index')
-    return render(
-        request,
-        'recipes/formRecipe.html',
-        {
-            'form': form,
-            'tags': tags,
-        }
-    )
+    return render(request, 'recipes/formRecipe.html', {'form': form, 'tags': tags})
+
 
 @login_required
 def recipe_edit(request, recipe_id, username):
@@ -86,17 +78,13 @@ def recipe_edit(request, recipe_id, username):
             ing.delete()
             recipe = form.save(commit=False)
             save_recipe(recipe, ingredients, request)
-            form.save_m2m()
             return redirect('recipe', username=request.user.username,
                             recipe_id=recipe.id)
 
         return render(request, 'recipes/formRecipe.html', context)
     else:
-        return redirect(
-            'recipe',
-            username=request.user.username,
-            recipe_id=recipe.id
-        )
+        return redirect('recipe', username=request.user.username,
+                        recipe_id=recipe.id)
 
 
 @login_required
@@ -123,14 +111,8 @@ def recipe_view(request, username, recipe_id):
     """
     recipe = get_object_or_404(Recipe, author__username=username, id=recipe_id)
     ingredients = recipe.recipeingredient.all()
-    return render(
-        request,
-        'recipes/recipe_view.html',
-        {
-            'recipe': recipe,
-            'ingredients': ingredients,
-        }
-    )
+    return render(request, 'recipes/recipe_view.html', {'recipe': recipe,
+                                                        'ingredients': ingredients})
 
 
 def profile(request, username):
@@ -140,26 +122,20 @@ def profile(request, username):
     """
     author = get_object_or_404(User, username=username)
     recipes = Recipe.objects.filter(author=author)
-    tags_query, tags_lst = get_tags(request)
+    tags_qs, tags_from_get = get_tags(request)
 
-    if tags_query:
+    if tags_qs:
         recipes = Recipe.objects.filter(
             author=author,
-            tags__slug__in=tags_query).distinct()
+            tags__slug__in=tags_qs).distinct()
 
     paginator = Paginator(recipes, ITEMS_FOR_PAGINATOR)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(
-        request,
-        'recipes/index.html',
-        {
-            'author': author,
-            'page': page,
-            'paginator': paginator,
-            'tags': tags_lst,
-        }
-    )
+    return render(request, 'recipes/index.html',
+                  {'author': author, 'page': page,
+                   'paginator': paginator, 'tags': tags_from_get}
+                  )
 
 
 @login_required
@@ -173,14 +149,10 @@ def subscriptions(request, username):
     paginator = Paginator(subscriptions, ITEMS_FOR_PAGINATOR)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    
     return render(
         request,
         'recipes/myFollow.html',
-        {
-            'page': page,
-            'paginator': paginator,
-        }
+        {'page': page, 'paginator': paginator}
     )
 
 
@@ -191,26 +163,19 @@ def favorites(request, username):
     """
     user = get_object_or_404(User, username=username)
     recipes = Recipe.objects.filter(favourites__user=request.user)
-    tags_query, tags_lst = get_tags(request)
+    tags_qs, tags_from_get = get_tags(request)
 
-    if tags_query:
+    if tags_qs:
         recipes = Recipe.objects.filter(favourites__user=request.user,
-                                        tags__slug__in=tags_query).distinct()
+                                        tags__slug__in=tags_qs).distinct()
 
     paginator = Paginator(recipes, ITEMS_FOR_PAGINATOR)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(
-        request,
-        'recipes/index.html',
-        {
-            'recipes': recipes,
-            'paginator': paginator,
-            'page': page,
-            'username': user,
-            'tags': tags_lst,
-        }
-    )
+    return render(request, 'recipes/index.html', {
+        'recipes': recipes, 'paginator': paginator, 'page': page,
+        'username': user, 'tags': tags_from_get
+    })
 
 
 @login_required
@@ -219,11 +184,10 @@ def purchases_list(request):
     Отображает список покупок
     """
     recipes_list = Purchase.purchase.get_purchases_list(request.user)
-    return render(
-        request,
-        'recipes/shopList.html',
-        {'recipes_list': recipes_list}
-    )
+    return render(request,
+                  'recipes/shopList.html',
+                  {'recipes_list': recipes_list}
+                  )
 
 
 @login_required

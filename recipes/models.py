@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator
 from django.db import models
 from taggit.managers import TaggableManager
 
@@ -35,10 +36,14 @@ class Recipe(models.Model):
 
 class IngredientForRecipe(models.Model):
     recipe = models.ForeignKey(
-        Recipe, on_delete=models.CASCADE, related_name='recipeingredient')
+        Recipe, on_delete=models.CASCADE, related_name='recipeingredient_all')
     ingredient = models.ForeignKey(
         Ingredient, on_delete=models.CASCADE, related_name='recipeingredient')
-    amount = models.CharField(max_length=20)
+    amount = models.DecimalField(
+        max_digits=6,
+        decimal_places=1,
+        validators=[MinValueValidator(1)]
+    )
 
     def __str__(self):
-        return str(self.ingredient) if self.ingredient else ''
+        return self.ingredient

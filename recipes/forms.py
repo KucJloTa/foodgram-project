@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
+from django import forms
 
 from .models import Recipe
 
@@ -7,8 +8,17 @@ from .models import Recipe
 class RecipeForm(ModelForm):
     class Meta:
         model = Recipe
-        fields = ['title', 'cooking_time',
-                  'description', 'image', 'tags']
+        fields = (
+            'title',
+            'cooking_time',
+            'description',
+            'image',
+            'tags',
+        )
+        widgets = {
+            'tags': forms.CheckboxSelectMultiple(),
+        }
+
 
     def clean(self):
         known_ids = []

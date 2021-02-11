@@ -1,27 +1,33 @@
 from taggit.models import Tag
 
-from .models import Ingredient, IngredientForRecipe
+from .models import Ingredient, IngredientForRecipe, Recipe
 
 
 def get_tags(request):
-    tags_lst = []
+    tags_from_get = []
     if 'tags' in request.GET:
-        tags_lst = request.GET.get('tags')
-        _ = tags_lst.split(',')
-        tags_query = Tag.objects.filter(slug__in=_).values('slug')
+        tags_from_get = request.GET.get('tags')
+        sl_tag = tags_from_get.split(',')
+        tags_qs = Tag.objects.filter(slug__in=sl_tag).values('slug')
     else:
-        tags_query = False
-    return [tags_query, tags_lst]
+        tags_qs = False
+    return [tags_qs, tags_from_get]
+
+
+# def tag_recipe_filter(tags_qs):
+#     if tags_qs:
+#         recipes = Recipe.objects.filter(tags__slug__in=tags_qs).distinct()
+#         return recipes
 
 
 def get_ingredients(data):
-    ingredient_num = set()
+    ingredient_numbers = set()
     ingredients = []
     for key in data:
         if key.startswith('nameIngredient_'):
             _, number = key.split('_')
-            ingredient_num.add(number)
-    for number in ingredient_num:
+            ingredient_numbers.add(number)
+    for number in ingredient_numbers:
         ingredients.append(
             {
                 'name': data[f'nameIngredient_{number}'],
@@ -33,6 +39,7 @@ def get_ingredients(data):
 
 
 def save_recipe(recipe, ingredients, request):
+    recipe = form.save(commit=False)
     recipe.author = request.user
     recipe.save()
     recipe_ingredients = []
@@ -43,3 +50,4 @@ def save_recipe(recipe, ingredients, request):
             ingredient=Ingredient.objects.get(name=item.get('name')),
             recipe=recipe)
         recipe_ing.save()
+    form.save_m2m()
