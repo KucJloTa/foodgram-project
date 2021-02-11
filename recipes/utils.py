@@ -1,58 +1,45 @@
-import pdfkit
+from taggit.models import Tag
 
-from decimal import Decimal
-
-from django.db import transaction, IntegrityError
-from django.http import HttpResponseBadRequest
-from django.shortcuts import get_object_or_404
-from django.template.loader import get_template
-
-from .models import Ingredient, RecipeIngredient
+from .models import Ingredient, IngredientForRecipe
 
 
-def get_ingredients(request):
-    """
-    Parse POST request body for ingredient names and their respective amounts.
-    """
-    ingredients = {}
-    for key, name in request.POST.items():
-        if key.startswith('nameIngredient'):
-            num = key.split('_')[1]
-            ingredients[name] = request.POST[
-                f'valueIngredient_{num}'
-            ]
-    
+def get_tags(request):
+    tags_lst = []
+    if 'tags' in request.GET:
+        tags_lst = request.GET.get('tags')
+        _ = tags_lst.split(',')
+        tags_query = Tag.objects.filter(slug__in=_).values('slug')
+    else:
+        tags_query = False
+    return [tags_query, tags_lst]
+
+
+def get_ingredients(data):
+    ingredient_num = set()
+    ingredients = []
+    for key in data:
+        if key.startswith('nameIngredient_'):
+            _, number = key.split('_')
+            ingredient_num.add(number)
+    for number in ingredient_num:
+        ingredients.append(
+            {
+                'name': data[f'nameIngredient_{number}'],
+                'unit': data[f'unitsIngredient_{number}'],
+                'amount': float(data[f'valueIngredient_{number}']),
+            }
+        )
     return ingredients
 
 
-def save_recipe(request, form):
-    """
-    Create and save a Recipe instance with necessary m2m relationships.
-    """
-    try:
-        with transaction.atomic():
-            recipe = form.save(commit=False)
-            recipe.author = request.user
-            recipe.save()
+def save_recipe(recipe, ingredients, request):
+    recipe.author = request.user
+    recipe.save()
+    recipe_ingredients = []
 
-            objs = []
-            ingredients = get_ingredients(request)
-            for name, quantity in ingredients.items():
-                ingredient = get_object_or_404(Ingredient, title=name)
-                objs.append(
-                    RecipeIngredient(
-                        recipe=recipe,
-                        ingredient=ingredient,
-                        quantity=Decimal(quantity.replace(',','.'))
-                    )
-                )
-            RecipeIngredient.objects.bulk_create(objs)
-
-            form.save_m2m()
-            return recipe
-    except IntegrityError:
-        raise HttpResponseBadRequest
-
-
-def edit_recipe(request, form, instance):
-    pass
+    for item in ingredients:
+        recipe_ing = IngredientForRecipe(
+            amount=item.get('amount'),
+            ingredient=Ingredient.objects.get(name=item.get('name')),
+            recipe=recipe)
+        recipe_ing.save()

@@ -1,92 +1,44 @@
-from autoslug import AutoSlugField
-
-from django.db import models
 from django.contrib.auth import get_user_model
-from django.core.validators import MinValueValidator
-
+from django.db import models
+from taggit.managers import TaggableManager
 
 User = get_user_model()
 
 
 class Ingredient(models.Model):
-    title = models.CharField(
-        'Название ингридиента',
-        max_length=150,
-        db_index=True
-    )
-    dimension = models.CharField('Единица измерения', max_length=10)
+    name = models.CharField(max_length=246)
+    unit = models.CharField(max_length=56)
 
-    class Meta:
-        ordering = ('title', )
-        verbose_name = 'ингридиент'
-        verbose_name_plural = 'ингридиенты'
-    
     def __str__(self):
-        return f'{self.title}, {self.dimension}'
+        return f'{self.name} ({self.unit})'
 
 
 class Recipe(models.Model):
+    title = models.CharField(max_length=477, blank=False)
     author = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='recipes',
-        verbose_name='Автор рецепта'
-    )
-    title = models.CharField('Название рецепта', max_length=200)
-    image = models.ImageField('Изображение', upload_to='recipes/')
-    text = models.TextField('Текст рецепта')
+        User, on_delete=models.CASCADE, related_name='recipes')
     ingredients = models.ManyToManyField(
-        Ingredient,
-        through='RecipeIngredient',
-        verbose_name='Ингредиент'
-    )
-    cooking_time = models.PositiveSmallIntegerField('Время приготовления')
-    slug = AutoSlugField(populate_from='title', allow_unicode=True)
-    tags = models.ManyToManyField(
-        'Tag',
-        related_name='recipes',
-        verbose_name='Теги'
-    )
-    pub_date = models.DateTimeField(
-        'Дата публикации',
-        auto_now_add=True,
-        db_index=True
-    )
+        Ingredient, through='IngredientForRecipe', blank=False, related_name='recipes')
+    description = models.TextField(blank=False)
+    pub_date = models.DateTimeField('date published', auto_now_add=True)
+    cooking_time = models.PositiveIntegerField(blank=False)
+    slug = models.SlugField(max_length=50, blank=True)
+    image = models.ImageField(upload_to='recipes/', null=True, blank=False)
+    tags = TaggableManager()
 
     class Meta:
-        ordering = ('-pub_date', )
-        verbose_name = 'рецепт'
-        verbose_name_plural = 'рецепты'
-    
+        ordering = ['-pub_date']
+
     def __str__(self):
         return self.title
 
 
-class RecipeIngredient(models.Model):
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+class IngredientForRecipe(models.Model):
     recipe = models.ForeignKey(
-        Recipe,
-        on_delete=models.CASCADE,
-        related_name='ingredients_amounts'
-    )
-    quantity = models.DecimalField(
-        max_digits=6,
-        decimal_places=1,
-        validators=[MinValueValidator(1)]
-    )
+        Recipe, on_delete=models.CASCADE, related_name='recipeingredient')
+    ingredient = models.ForeignKey(
+        Ingredient, on_delete=models.CASCADE, related_name='recipeingredient')
+    amount = models.CharField(max_length=20)
 
-    class Meta:
-        unique_together = ('ingredient', 'recipe')
-
-
-class Tag(models.Model):
-    title = models.CharField('Имя тега', max_length=50, db_index=True)
-    display_name = models.CharField('Имя тега для шаблона', max_length=50)
-    color = models.CharField('Цвет тега', max_length=50)
-
-    class Meta:
-        verbose_name = 'тег'
-        verbose_name_plural = 'теги'
-    
     def __str__(self):
-        return self.title
+        return str(self.ingredient) if self.ingredient else ''

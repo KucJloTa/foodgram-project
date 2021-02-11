@@ -1,0 +1,25 @@
+{% extends "recipes/base.html" %}
+{% load static %}
+{% block title %} Технологии {% endblock %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{% static 'pages/index.css' %}">
+{% endblock stylesheet %}
+
+{% block nav %}
+    {% include "includes/nav.html" %}
+{% endblock %}
+
+{% block content %}
+    <main class="main container">
+        <div class="custom-center-block">
+            <p><h2>Для создания этого сайта использовались следующие технологии:</h2>
+            <ul>
+                <li><h3><a href='https://www.python.org/'>Python</a></h3></li>
+                <li><h3><a href='https://docs.djangoproject.com/en/3.1/'>Django</a></h3></li>
+            </ul>
+            </p>
+        </div>
+    </main>
+
+{% endblock %}

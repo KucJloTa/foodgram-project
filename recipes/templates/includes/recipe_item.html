@@ -1,0 +1,47 @@
+<div class="card" data-id="{{ recipe.id }}">
+    {% load thumbnail %}
+    {% thumbnail recipe.image "360x339" crop="center" upscale=True as im %}
+    <img class="card-img" src="{{ im.url }}" />
+    {% endthumbnail %}
+    <div class="card__body">
+        <a class="card__title link" href="{% url 'recipe' recipe.author recipe.id %}" target="_blank">
+            {{ recipe.title }}
+        </a>
+        <ul class="card__items">
+            {% for tag in recipe.tags.all %}
+                {% if tag.name == '2'%}
+                    <li class="card__item"><span class="badge badge_style_green">Обед</span></li>
+                {% endif %}
+                {% if tag.name == '1' %}
+                    <li class="card__item"><span class="badge badge_style_orange">Завтрак</span></li>
+                {% endif %}
+                {% if tag.name == '3' %}
+                    <li class="card__item"><span class="badge badge_style_purple">Ужин</span></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        <div class="card__items card__items_column">
+            <p class="card__text"><span class="icon-time"></span> {{ recipe.cooking_time }} мин.</p>
+            <p class="card__text"><span class="icon-user"></span> <a href="{% url 'profile' recipe.author %}"
+                    style="color: black">{{ recipe.author }}</a></p>
+        </div>
+    </div>
+    <div class="card__footer">
+        {% if user.is_authenticated %}
+            {% load recipe_filters %}
+            {% if recipe.id|recipe_in_purchases:user.id %}
+                <button class="button button_style_light-blue-outline" name="purchases"><span class="icon-check button__icon"></span> Рецепт добавлен</button>
+            {% else %}
+                <button class="button button_style_light-blue" name="purchases" data-out><span class="icon-plus button__icon"></span>Добавить в покупки</button>
+            {% endif %}
+
+            {% load filters %}
+            {% csrf_token %}
+            {% if recipe.id|is_favorite:user.id %}
+                <button class="button button_style_none" name="favorites"><span class="icon-favorite icon-favorite_active"></span></button>
+            {% else %}
+                <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite"></span></button>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
