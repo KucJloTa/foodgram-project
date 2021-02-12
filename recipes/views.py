@@ -10,7 +10,7 @@ from foodgram.settings import ITEMS_FOR_PAGINATOR
 
 from .forms import RecipeForm
 from .models import IngredientForRecipe, Recipe, User
-from .utils import get_tags, save_recipe, get_ingredients
+from .utils import get_tags, save_recipe, get_ingredients, tag_recipe_filter
 
 
 def index(request):
@@ -20,10 +20,7 @@ def index(request):
     recipes = Recipe.objects.all()
     tags_qs, tags_from_get = get_tags(request)
 
-    if tags_qs:
-        recipes = Recipe.objects.filter(tags__slug__in=tags_qs).distinct()
-
-#    tag_recipe_filter(tags_qs)
+    tag_recipe_filter(tags_qs)
 
     paginator = Paginator(recipes, ITEMS_FOR_PAGINATOR)
     page_number = request.GET.get('page')
