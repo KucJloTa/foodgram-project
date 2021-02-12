@@ -20,6 +20,11 @@ def tag_recipe_filter(tags_qs):
         return recipes
 
 
+def all_tags():
+    tags = Tag.objects.all()
+    return tags
+
+
 def get_ingredients(data):
     ingredient_numbers = set()
     ingredients = []

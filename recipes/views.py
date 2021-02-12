@@ -10,7 +10,7 @@ from foodgram.settings import ITEMS_FOR_PAGINATOR
 
 from .forms import RecipeForm
 from .models import IngredientForRecipe, Recipe, User
-from .utils import get_tags, save_recipe, get_ingredients, tag_recipe_filter
+from .utils import get_tags, save_recipe, get_ingredients, tag_recipe_filter, all_tags
 
 
 def index(request):
@@ -41,15 +41,12 @@ def new_recipe(request):
     POST: Если форма валидная сохранит рецепт в базу, если нет покажет ошибки
     """
     form = RecipeForm(request.POST or None, files=request.FILES or None)
-#"В нескольких вьюхах в контекст шаблона отдаются все тэги - можно оформить кастомным темплейт фильтром или контекст процессором"
-#Расскажи пжл поподробнее свою логику)
-    tags = Tag.objects.all()
 
     if form.is_valid():
         ingredients = get_ingredients(request.POST)
         save_recipe(recipe, ingredients, request)
         return redirect('index')
-    return render(request, 'recipes/formRecipe.html', {'form': form, 'tags': tags})
+    return render(request, 'recipes/formRecipe.html', {'form': form, 'tags': all_tags})
 
 
 @login_required
@@ -63,9 +60,8 @@ def recipe_edit(request, recipe_id, username):
     ing = IngredientForRecipe.objects.filter(recipe=recipe_id)
     form = RecipeForm(request.POST or None, files=request.FILES or None,
                       instance=recipe)
-    tags = Tag.objects.all()
     context = {'form': form, 'recipe': recipe,
-               'ingredients': ing, 'tags': tags}
+               'ingredients': ing, 'tags': all_tags}
 
     if recipe.author == request.user:
         ingredients = get_ingredients(request.POST)
