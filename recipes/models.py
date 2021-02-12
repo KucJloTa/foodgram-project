@@ -36,14 +36,11 @@ class Recipe(models.Model):
 
 class IngredientForRecipe(models.Model):
     recipe = models.ForeignKey(
-        Recipe, on_delete=models.CASCADE, related_name='recipeingredient_all')
+        Recipe, on_delete=models.CASCADE, related_name='recipe_ingredients')
     ingredient = models.ForeignKey(
-        Ingredient, on_delete=models.CASCADE, related_name='recipeingredient')
+        Ingredient, on_delete=models.CASCADE, related_name='recipe_ingredients')
     amount = models.DecimalField(
         max_digits=6,
         decimal_places=1,
         validators=[MinValueValidator(1)]
     )
-
-    def __str__(self):
-        return self.ingredient
