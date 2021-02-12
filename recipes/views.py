@@ -19,8 +19,7 @@ def index(request):
     """
     recipes = Recipe.objects.all()
     tags_qs, tags_from_get = get_tags(request)
-# "Фильтрация по рецептов по тэгам повторяется между вьюхами - давай оформим отдельной функцией"
-# - не понял, фильтр же разный, зачем выносить в отдельную вьюху? не очень понял этот момент, а главное как?))
+
     if tags_qs:
         recipes = Recipe.objects.filter(tags__slug__in=tags_qs).distinct()
 

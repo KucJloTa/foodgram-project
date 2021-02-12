@@ -14,10 +14,10 @@ def get_tags(request):
     return [tags_qs, tags_from_get]
 
 
-# def tag_recipe_filter(tags_qs):
-#     if tags_qs:
-#         recipes = Recipe.objects.filter(tags__slug__in=tags_qs).distinct()
-#         return recipes
+def tag_recipe_filter(tags_qs):
+    if tags_qs:
+        recipes = Recipe.objects.filter(tags__slug__in=tags_qs).distinct()
+        return recipes
 
 
 def get_ingredients(data):

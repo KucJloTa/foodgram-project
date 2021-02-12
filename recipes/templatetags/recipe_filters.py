@@ -46,4 +46,4 @@ def recipe_in_purchases(recipe_id, user_id):
     recipes = purchase_list(user_id)
     recipe = get_object_or_404(Recipe, pk=recipe_id)
     if recipe in recipes:
-        return True
+        return recipe in recipes
