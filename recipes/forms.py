@@ -19,7 +19,6 @@ class RecipeForm(ModelForm):
             'tags': forms.CheckboxSelectMultiple(),
         }
 
-
     def clean(self):
         known_ids = []
         for items in self.data.keys():

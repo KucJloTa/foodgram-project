@@ -44,3 +44,6 @@ class IngredientForRecipe(models.Model):
         decimal_places=1,
         validators=[MinValueValidator(1)]
     )
+
+    def __str__(self):
+        return f'{self.ingredient.name}'

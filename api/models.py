@@ -28,12 +28,8 @@ class Subscription(models.Model):
     class Meta:
         verbose_name = 'подсписка'
         verbose_name_plural = 'подписки'
-        constraints = [
-        models.UniqueConstraint(
-            fields=['user', 'author'],
-            name='unique subscription',
-        )
-    ]
+        constraints = [models.UniqueConstraint(fields=['user', 'author'],
+        name='unique subscription',)]
 
 
 class Purchase(models.Model):
