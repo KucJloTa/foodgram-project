@@ -34,7 +34,7 @@ services:
       - ./static_volume:/code/static/
       - ./media_volume:/code/media/
     ports: 
-      - 8888:80
+      - 80:80
     
     depends_on: 
       - web
