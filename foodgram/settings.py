@@ -12,7 +12,7 @@ SECRET_KEY = '&3-343kz_syg9q@!*asp+l1iwrr-t260jfl_=3zi38xdz@4ez+'
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    '84.201.171.49',
+    '130.193.46.235',
     '127.0.0.1'
 ]
 

@@ -12,7 +12,7 @@ Python3.8 и выше, Docker, Docker-Compose
 git clone https://github.com/KucJloTa/foodgram-project.git
 ```
 
-2. Перейти в каталог с проектом и создать виртуальное окружение 
+2. Перейти в каталог с проектом и создать виртуальное окружение.
 ```
 python -m venv venv
 ```
