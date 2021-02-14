@@ -20,7 +20,7 @@ def index(request):
     recipes = Recipe.objects.all()
     tags_qs, tags_from_get = get_tags(request)
 
-    tag_recipe_filter(tags_qs)
+    tag_recipe_filter('index', tags_qs)
 
     paginator = Paginator(recipes, ITEMS_FOR_PAGINATOR)
     page_number = request.GET.get('page')
@@ -116,7 +116,7 @@ def profile(request, username):
     author = get_object_or_404(User, username=username)
     recipes = Recipe.objects.filter(author=author)
     tags_qs, tags_from_get = get_tags(request)
-    tag_recipe_filter(tags_qs)
+    tag_recipe_filter('profile', tags_qs)
     paginator = Paginator(recipes, ITEMS_FOR_PAGINATOR)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
@@ -152,7 +152,7 @@ def favorites(request, username):
     user = get_object_or_404(User, username=username)
     recipes = Recipe.objects.filter(favourites__user=request.user)
     tags_qs, tags_from_get = get_tags(request)
-    tag_recipe_filter(tags_qs)
+    tag_recipe_filter('favorites', tags_qs)
     paginator = Paginator(recipes, ITEMS_FOR_PAGINATOR)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)

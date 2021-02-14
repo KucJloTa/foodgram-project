@@ -1,4 +1,5 @@
 from taggit.models import Tag
+from django.db.models import Q
 
 from .models import Ingredient, IngredientForRecipe, Recipe
 
@@ -14,10 +15,19 @@ def get_tags(request):
     return [tags_qs, tags_from_get]
 
 
-def tag_recipe_filter(tags_qs):
+def tag_recipe_filter(view, tags_qs):
     if tags_qs:
-        recipes = Recipe.objects.filter(tags__slug__in=tags_qs).distinct()
-        return recipes
+        if view == 'index':
+            recipes = Recipe.objects.filter(tags__slug__in=tags_qs).distinct()
+            return recipes
+        elif view == 'profile':
+            recipes = Recipe.objects.filter(
+                author=author, tags__slug__in=tags_qs).distinct()
+            return recipes
+        elif view == 'favorites':
+            recipes = Recipe.objects.filter(
+                favourites__user=request.user, tags__slug__in=tags_qs).distinct()
+            return recipes
 
 
 def all_tags():

@@ -29,7 +29,7 @@ class Subscription(models.Model):
         verbose_name = 'подсписка'
         verbose_name_plural = 'подписки'
         constraints = [models.UniqueConstraint(fields=['user', 'author'],
-        name='unique subscription',)]
+                                               name='unique subscription',)]
 
 
 class Purchase(models.Model):
