@@ -39,7 +39,7 @@ pip install -r requirements.txt
 python manage.py migrate
 ```
 
-6. Для проверки работы проекта запустить тестовый сервер 
+6. Для проверки работы проекта запустить тестовый сервер.
 ```
 python manage.py runserver
 ```

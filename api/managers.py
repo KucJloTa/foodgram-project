@@ -9,19 +9,19 @@ User = get_user_model()
 class PurchaseManager(models.Manager):
     def counter(self, user):
         try:
-            return get_object_or_404(User, id=user).recipes.count()
+            return super().get_queryset().get(user=user).recipes.count()
         except ObjectDoesNotExist:
             return 0
 
     def get_purchases_list(self, user):
         try:
-            return get_object_or_404(User, id=user).recipes.all()
+            return super().get_queryset().get(user=user).recipes.all()
         except ObjectDoesNotExist:
             return []
 
     def get_or_create_purchase(self, user):
         try:
-            return get_object_or_404(User, id=user)
+            return super().get_queryset().get(user=user)
         except ObjectDoesNotExist:
             purchase = Purchase(user=user)
             purchase.save()
