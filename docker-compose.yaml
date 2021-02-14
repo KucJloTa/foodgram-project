@@ -25,6 +25,8 @@ services:
       - db
     env_file:
       - ./.env
+    expose:
+      - 8000
 
   nginx:
     image: nginx:1.19.6
