@@ -7,7 +7,7 @@
 Python3.8 и выше, Docker, Docker-Compose
 
 # Инструкция по развертыванию проекта
-1. Скачать проект или клонировать с помощью git 
+1. Скачать проект или клонировать с помощью git.
 ```
 git clone https://github.com/KucJloTa/foodgram-project.git
 ```
