@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Удаление рецепта{% endblock %}
+
+{% load static %}
+{% block static %}
+    <link rel="stylesheet" href="{% static '/pages/index.css' %}">
+{% endblock %}
+
+{% block content %}
+{% include 'nav.html' %}
+{% load user_filters %}
+<main class="main container">
+    <div class="main__header">
+    <h1 class="main__title">Удаление рецепта</h1>
+    </div>
+    <div class="custom-center-block">
+        <p class="custom-text-block">Удалить рецепт {{ recipe.title }}?</p>
+        <div class="custom-button-block">
+            <form method="POST" action="{% url 'recipe_delete' username recipe_id %}">
+                {% csrf_token %}
+                <button class="button button_style_blue">Удалить</button>
+            </form>
+            <form action="{% url 'recipe_edit' username recipe_id %}" >
+                <button class="button button_style_light-blue">Отмена</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+{% include 'footer.html' %}
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title%} Список покупок {% endblock %}
+{% load static %}
+{% csrf_token %}
+{% block static %}
+    <link rel="stylesheet" href="{% static 'pages/shopList.css' %}">
+{% endblock %}
+{% load user_filters %}
+{% load templates_filters %}
+
+
+
+{% block content %}
+
+{% include 'nav.html' with purchases=True %}
+
+<main class="main container">
+    <div class="main__header">
+        <h1 class="main__title">Список покупок</h1>
+    </div>
+    <div class="card-list card-list_column">
+        <ul class="shopping-list">
+            {% for recipe in shopping_list %}
+            <li class="shopping-list__item" data-id="{{recipe.recipe.id}}">
+                <div class="recipe recipe_reverse">
+                    {% load thumbnail %}
+                    {% thumbnail recipe.recipe.image "600x600" crop="center" upscale=True as im %}
+                    <a href="{% url 'recipe_view' recipe.recipe.author.username recipe.id %}" class="link" target="_blank">
+                    <img src="{{ im.url }}" alt="The author of the recipe did not add a photo" class="recipe__image recipe__image_big">
+                    </a>
+                    {% endthumbnail %}
+                    
+                    <h3 class="recipe__title">{{ recipe.recipe.title }}</h3>
+                    
+                    <p class="recipe__text"><span class="icon-time"></span> {{ recipe.recipe.cooking_time }} мин.</p>
+                </div>
+                <a href="#" class="shopping-list__button link">Удалить</a>
+            </li>
+        {% endfor %}
+
+        </ul>
+        <a href="{% url 'download_card' %}"><button class="button button_style_blue">Скачать список</button></a>
+
+
+    </div>
+</main>
+
+{% include 'footer.html' %}
+
+<script src="{% static 'js/config/config.js' %}"></script>
+<script src="{% static 'js/components/Header.js' %}"></script>
+<script src="{% static 'js/components/ShopList.js' %}"></script>
+<script src="{% static 'js/api/Api.js' %}"></script>
+<script src="{% static 'shopList.js' %}"></script>
+
+{% endblock %}

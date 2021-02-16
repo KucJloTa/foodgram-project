@@ -1,131 +1,423 @@
 
+// class Api {
+//     constructor(apiUrl) {
+//         this.apiUrl =  apiUrl;
+//     }
+
+//   getToken () {
+//     if (document.getElementsByName('csrfmiddlewaretoken').length > 0) {
+//         return document.getElementsByName('csrfmiddlewaretoken')[0].value
+//     } else {
+//         return ''
+//     }
+// }
+
+//   getPurchases () {
+//     return fetch(`api/v1/purchases/`, {
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'X-CSRFToken': this.getToken()
+//       }
+//     })
+//       .then( e => {
+//           if(e.ok) {
+//               return e.json()
+//           }
+//           return Promise.reject(e.statusText)
+//       })
+//   }
+//   addPurchases (id) {
+//     return fetch(`/api/v1/purchases/${id}`, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'X-CSRFToken': this.getToken()
+//       },
+//       body: JSON.stringify({
+//         id: id
+//       })
+//     })
+//       .then( e => {
+//           if(e.ok) {
+//               return e.json()
+//           }
+//           return Promise.reject(e.statusText)
+//       })
+//   }
+//   removePurchases (id){
+//     return fetch(`/api/v1/purchases/${id}`, {
+//       method: 'DELETE',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'X-CSRFToken': this.getToken()
+//       }
+//     })
+//       .then( e => {
+//           if(e.ok) {
+//               return e.json()
+//           }
+//           return Promise.reject(e.statusText)
+//       })
+//   }
+//   addSubscriptions(id) {
+//     return fetch(`/api/v1/subscriptions/`, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'X-CSRFToken': this.getToken()
+//       },
+//       body: JSON.stringify({
+//         id: id
+//       })
+//     })
+//       .then( e => {
+//           if(e.ok) {
+//               return e.json()
+//           }
+//           return Promise.reject(e.statusText)
+//       })
+//   }
+//   removeSubscriptions (id) {
+//     return fetch(`/api/v1/subscriptions/${id}`, {
+//       method: 'DELETE',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'X-CSRFToken': this.getToken()
+//       }
+//     })
+//       .then( e => {
+//           if(e.ok) {
+//               return e.json()
+//           }
+//           return Promise.reject(e.statusText)
+//       })
+//   }
+//   addFavorites (id)  {
+//     return fetch(`/api/v1/favorites/`, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'X-CSRFToken': this.getToken()
+//       },
+//       body: JSON.stringify({
+//         id: id
+//       })
+//     })
+//         .then( e => {
+//             if(e.ok) {
+//                 return e.json()
+//             }
+//             return Promise.reject(e.statusText)
+//         })
+//   }
+//   removeFavorites (id) {
+//     return fetch(`/api/v1/favorites/${id}`, {
+//       method: 'DELETE',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'X-CSRFToken': this.getToken()
+//       }
+//     })
+//         .then( e => {
+//             if(e.ok) {
+//                 return e.json()
+//             }
+//             return Promise.reject(e.statusText)
+//         })
+//   }
+//     getIngredients  (text)  {
+//         return fetch(`/api/v1/ingredients?query=${text}`, {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 'X-CSRFToken': this.getToken()
+//             }
+//         })
+//             .then( e => {
+//                 if(e.ok) {
+//                     return e.json()
+//                 }
+//                 return Promise.reject(e.statusText)
+//             })
+//     }
+// }
+
+
+// class Api {
+//     constructor(apiUrl) {
+//         this.apiUrl =  apiUrl;
+//     }
+//   getPurchases () {
+//     return fetch(`/api/purchases/`, {
+//       headers: {
+//         'Content-Type': 'application/json',
+//           'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
+
+//       }
+//     })
+//       .then( e => {
+//           if(e.ok) {
+//               return e.json()
+//           }
+//           return Promise.reject(e.statusText)
+//       })
+//   }
+//   addPurchases (id) {
+//     return fetch(`/api/purchases/`, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//           'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
+
+//       },
+//       body: JSON.stringify({
+//         id: id
+//       })
+//     })
+//       .then( e => {
+//           if(e.ok) {
+//               return e.json()
+//           }
+//           return Promise.reject(e.statusText)
+//       })
+//   }
+//   removePurchases (id){
+//     return fetch(`/api/purchases/${id}`, {
+//       method: 'DELETE',
+//       headers: {
+//         'Content-Type': 'application/json',
+//           'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
+
+//       }
+//     })
+//       .then( e => {
+//           if(e.ok) {
+//               return e.json()
+//           }
+//           return Promise.reject(e.statusText)
+//       })
+//   }
+//   addSubscriptions(id) {
+//     return fetch(`/api/v1/subscriptions/`, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//           'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
+
+//       },
+//       body: JSON.stringify({
+//         id: id
+//       })
+//     })
+//       .then( e => {
+//           if(e.ok) {
+//               return e.json()
+//           }
+//           return Promise.reject(e.statusText)
+//       })
+//   }
+//   removeSubscriptions (id) {
+//     return fetch(`/api/v1/subscriptions/${id}`, {
+//       method: 'DELETE',
+//       headers: {
+//         'Content-Type': 'application/json',
+//           'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
+
+//       }
+//     })
+//       .then( e => {
+//           if(e.ok) {
+//               return e.json()
+//           }
+//           return Promise.reject(e.statusText)
+//       })
+//   }
+//   addFavorites (id)  {
+//     return fetch(`/api/v1/favorites/`, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//           'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
+//       },
+//       body: JSON.stringify({
+//         id: id
+//       })
+//     })
+//         .then( e => {
+//             if(e.ok) {
+//                 return e.json()
+//             }
+//             return Promise.reject(e.statusText)
+//         })
+//   }
+//   removeFavorites (id) {
+//     return fetch(`/api/v1/favorites/${id}`, {
+//       method: 'DELETE',
+//       headers: {
+//         'Content-Type': 'application/json',
+//           'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
+//       }
+//     })
+//         .then( e => {
+//             if(e.ok) {
+//                 return e.json()
+//             }
+//             return Promise.reject(e.statusText)
+//         })
+//   }
+//     getIngredients  (text)  {
+//         return fetch(`/api/v1/ingredients?query=${text}`, {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
+
+//             }
+//         })
+//             .then( e => {
+//                 if(e.ok) {
+//                     return e.json()
+//                 }
+//                 return Promise.reject(e.statusText)
+//             })
+//     }
+// }
+
+
+
 class Api {
-  constructor(apiUrl) {
-    this.apiUrl = apiUrl;
-  }
-  getPurchases() {
-    return fetch(`/purchases`, {
+    constructor(apiUrl) {
+        this.apiUrl =  apiUrl;
+    }
+  getPurchases () {
+    return fetch(`/api/v1/purchases/`, {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+          'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
+
       }
     })
-      .then(e => {
-        if (e.ok) {
-          return e.json()
-        }
-        return Promise.reject(e.statusText)
+      .then( e => {
+          if(e.ok) {
+              return e.json()
+          }
+          return Promise.reject(e.statusText)
       })
   }
-  addPurchases(id) {
-    return fetch(`/purchases/`, {
+  addPurchases (id) {
+    return fetch(`/api/v1/purchases/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+          'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
+
       },
       body: JSON.stringify({
         id: id
       })
     })
-      .then(e => {
-        if (e.ok) {
-          return e.json()
-        }
-        return Promise.reject(e.statusText)
+      .then( e => {
+          if(e.ok) {
+              return e.json()
+          }
+          return Promise.reject(e.statusText)
       })
   }
-  removePurchases(id) {
-    return fetch(`/purchases/${id}/`, {
+  removePurchases (id){
+    return fetch(`/api/v1/purchases/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+          'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
+
       }
     })
-      .then(e => {
-        if (e.ok) {
-          return e.json()
-        }
-        return Promise.reject(e.statusText)
+      .then( e => {
+          if(e.ok) {
+              return e.json()
+          }
+          return Promise.reject(e.statusText)
       })
   }
   addSubscriptions(id) {
-    return fetch(`/subscriptions/`, {
+    return fetch(`/api/v1/subscriptions/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+          'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
+
       },
       body: JSON.stringify({
         id: id
       })
     })
-      .then(e => {
-        if (e.ok) {
-          return e.json()
-        }
-        return Promise.reject(e.statusText)
+      .then( e => {
+          if(e.ok) {
+              return e.json()
+          }
+          return Promise.reject(e.statusText)
       })
   }
-  removeSubscriptions(id) {
-    return fetch(`/subscriptions/${id}/`, {
+  removeSubscriptions (id) {
+    return fetch(`/api/v1/subscriptions/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+          'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
+
       }
     })
-      .then(e => {
-        if (e.ok) {
-          return e.json()
-        }
-        return Promise.reject(e.statusText)
+      .then( e => {
+          if(e.ok) {
+              return e.json()
+          }
+          return Promise.reject(e.statusText)
       })
   }
-  addFavorites(id) {
-    return fetch(`/favorites/`, {
+  addFavorites (id)  {
+    return fetch(`/api/v1/favorites/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+          'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
       },
       body: JSON.stringify({
         id: id
       })
     })
-      .then(e => {
-        if (e.ok) {
-          return e.json()
-        }
-        return Promise.reject(e.statusText)
-      })
+        .then( e => {
+            if(e.ok) {
+                return e.json()
+            }
+            return Promise.reject(e.statusText)
+        })
   }
-  removeFavorites(id) {
-    return fetch(`/favorites/${id}/`, {
+  removeFavorites (id) {
+    return fetch(`/api/v1/favorites/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+          'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
       }
     })
-      .then(e => {
-        if (e.ok) {
-          return e.json()
-        }
-        return Promise.reject(e.statusText)
-      })
+        .then( e => {
+            if(e.ok) {
+                return e.json()
+            }
+            return Promise.reject(e.statusText)
+        })
   }
-  getIngredients(text) {
-    return fetch(`/ingredients?query=${text}`, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(e => {
-        if (e.ok) {
-          return e.json()
-        }
-        return Promise.reject(e.statusText)
-      })
-  }
+    getIngredients  (text)  {
+        return fetch(`/api/v1/ingredients?query=${text}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
+
+            }
+        })
+            .then( e => {
+                if(e.ok) {
+                    return e.json()
+                }
+                return Promise.reject(e.statusText)
+            })
+    }
 }

@@ -1,34 +1,20 @@
-from django.core.exceptions import ValidationError
-from django.forms import ModelForm
 from django import forms
+from django.forms import CheckboxSelectMultiple
 
 from .models import Recipe
 
 
-class RecipeForm(ModelForm):
+class RecipeForm(forms.ModelForm):
     class Meta:
         model = Recipe
-        fields = (
+        fields = [
             'title',
-            'cooking_time',
-            'description',
+            'breakfast',
+            'lunch',
+            'dinner',
             'image',
-            'tags',
-        )
+            'description',
+            'cooking_time']
         widgets = {
-            'tags': forms.CheckboxSelectMultiple(),
+            'tag': CheckboxSelectMultiple(),
         }
-
-    def clean(self):
-        known_ids = []
-        for items in self.data.keys():
-            if 'nameIngredient' in items:
-                name, id = items.split('_')
-                known_ids.append(id)
-
-        for id in known_ids:
-            value = self.data.get(f'valueIngredient_{id}')
-
-            if float(value) <= 0:
-                raise ValidationError(
-                    'Пожалуйста, добавьте хотя бы один ингредиент')

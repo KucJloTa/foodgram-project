@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+{% load user_filters %}
+{% block title %}Вы вышли{% endblock %}
+{% block static %}
+    <link rel="stylesheet" href="{% static 'pages/index.css' %}">
+{% endblock %}
+    
+{% load user_filters %}
+{% load templates_filters%}
+
+{% block content %}
+
+{% include 'nav.html' with logout=True %}
+<main class="main container">
+        <div class="main__header">
+            <h1 class="main__title">Вы вышли из своей учётной записи. Ждём вас снова!</h1>
+        </div>
+
+</main>
+{% include 'footer.html' %}
+
+{% endblock  %}

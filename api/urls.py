@@ -1,19 +1,13 @@
 from django.urls import path
-
 from . import views
 
 urlpatterns = [
-    path('favorites/', views.Favorites.as_view(), name='add_favorites'),
-    path('favorites/<int:recipe_id>/',
-         views.Favorites.as_view(), name='delete_favorites'),
-    path(
-        'subscriptions/',
-        views.Subscriptions.as_view(),
-        name='add_subscriprion'),
-    path('subscriptions/<int:author_id>/',
-         views.Subscriptions.as_view(), name='delete_subscriprion'),
-    path('purchases/', views.Purchases.as_view(), name='add_prchases'),
-    path('purchases/<int:recipe_id>/',
-         views.Purchases.as_view(), name='delete_purchase'),
-    path('ingredients/', views.get_ingredients, name='get_ingredients'),
+
+    path('v1/ingredients/', views.Ingredient.as_view()),
+    path('v1/favorites/', views.Favorites.as_view()),
+    path('v1/favorites/<int:recipe_id>/', views.Favorites.as_view()),
+    path('v1/subscriptions/', views.Subscribe.as_view()),
+    path('v1/subscriptions/<int:author_id>/', views.Subscribe.as_view()),
+    path('v1/purchases/', views.Purchase.as_view()),
+    path('v1/purchases/<int:recipe_id>/', views.Purchase.as_view()),
 ]

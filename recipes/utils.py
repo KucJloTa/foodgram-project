@@ -1,68 +1,28 @@
-from taggit.models import Tag
-from django.db.models import Q
+def get_ingredients(request):
+    ingredients = {}
+    for key in dict(request.POST.items()):
+        if 'nameIngredient' in key:
+            a = key.split('_')
+            ingredients[dict(request.POST.items())[key]] = int(request.POST[
+                f'valueIngredient_{a[1]}'])
 
-from .models import Ingredient, IngredientForRecipe, Recipe
-
-
-def get_tags(request):
-    tags_from_get = []
-    if 'tags' in request.GET:
-        tags_from_get = request.GET.get('tags')
-        sl_tag = tags_from_get.split(',')
-        tags_qs = Tag.objects.filter(slug__in=sl_tag).values('slug')
-    else:
-        tags_qs = False
-    return [tags_qs, tags_from_get]
-
-
-def tag_recipe_filter(view, tags_qs):
-    if tags_qs:
-        if view == 'index':
-            recipes = Recipe.objects.filter(tags__slug__in=tags_qs).distinct()
-            return recipes
-        elif view == 'profile':
-            recipes = Recipe.objects.filter(
-                author=author, tags__slug__in=tags_qs).distinct()
-            return recipes
-        elif view == 'favorites':
-            recipes = Recipe.objects.filter(
-                favourites__user=request.user, tags__slug__in=tags_qs).distinct()
-            return recipes
-
-
-def all_tags():
-    tags = Tag.objects.all()
-    return tags
-
-
-def get_ingredients(data):
-    ingredient_numbers = set()
-    ingredients = []
-    for key in data:
-        if key.startswith('nameIngredient_'):
-            _, number = key.split('_')
-            ingredient_numbers.add(number)
-    for number in ingredient_numbers:
-        ingredients.append(
-            {
-                'name': data[f'nameIngredient_{number}'],
-                'unit': data[f'unitsIngredient_{number}'],
-                'amount': float(data[f'valueIngredient_{number}']),
-            }
-        )
     return ingredients
 
 
-def save_recipe(recipe, ingredients, request):
-    recipe = form.save(commit=False)
-    recipe.author = request.user
-    recipe.save()
-    recipe_ingredients = []
+def food_time_filter(request, queryset):
+    food = {
+        'breakfast': (True, False),
+        'lunch': (True, False),
+        'dinner': (True, False)
+    }
+    food_time = request.GET.get('filter')
 
-    for item in ingredients:
-        recipe_ing = IngredientForRecipe(
-            amount=item.get('amount'),
-            ingredient=Ingredient.objects.get(name=item.get('name')),
-            recipe=recipe)
-        recipe_ing.save()
-    form.save_m2m()
+    if food_time in food:
+        food[food_time] = (True,)
+
+    queryset_new = queryset.filter(
+        breakfast__in=food['breakfast'],
+        lunch__in=food['lunch'],
+        dinner__in=food['dinner'])
+
+    return queryset_new, food_time
