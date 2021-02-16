@@ -1,3 +1,0 @@
-[flake8]
-exclude = .
-ignore = E501, E126, E121, F401, F811, W291, W292, E115, E303, E122,
