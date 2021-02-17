@@ -23,7 +23,7 @@ class IngredientRecipe(models.Model):
         "Ingredients",
         on_delete=models.CASCADE,
         related_name='ingredient')
-    amount = models.IntegerField()
+    amount = models.PositiveSmallIntegerField()
 
     def __str__(self):
         return f'{self.ingredient.title} {self.amount} {self.ingredient.dimension}'
