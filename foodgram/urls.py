@@ -20,6 +20,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls import handler404, handler500
 
+from . import views
+
 handler404 = "recipes.views.page_not_found"
 handler500 = "recipes.views.server_error"
 
@@ -29,6 +31,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
     path('', include('recipes.urls')),
+    path('about/author/', views.author, name='author'),
+    path('about/tech/', views.tech, name='tech'),
 ]
 
 if settings.DEBUG:
