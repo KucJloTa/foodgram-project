@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import user_passes_test, login_required
 from foodgram.settings import ITEMS_FOR_PAGINATOR
 from django.http import JsonResponse, HttpResponse
 from django.db.models import Sum
+from django.utils.encoding import escape_uri_path
 
 from .utils import food_time_filter, get_ingredients
 from .forms import RecipeForm
@@ -212,7 +213,8 @@ def download_card(request):
     response = HttpResponse(
         file_data, content_type='application/text charset=utf-8'
     )
-    response['Content_Disposition'] = 'attachment; filename="ShoppingList.txt"'
+    myfile = 'Список покупок.txt'
+    response['Content-Disposition'] = "attachment; filename="+ escape_uri_path(myfile)
     return response
 
 
