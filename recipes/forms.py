@@ -5,6 +5,9 @@ from .models import Recipe
 
 
 class RecipeForm(forms.ModelForm):
+
+    amount = forms.IntegerField(min_value=1)
+
     class Meta:
         model = Recipe
         fields = [

@@ -64,6 +64,7 @@
                         <li class="single-card__item"><p class="single-card__text"><span class="icon-user"></span> {{ recipe.author.get_full_name }}</p></li>
                         {% if user == recipe.author or user.is_superuser %}
                         <li class="single-card__item">  <a style="margin-left: 2.5em" href="{% url 'recipe_edit' username=recipe.author.username recipe_id=recipe.id %}" class="single-card__text">Редактировать рецепт</a></li>
+                        <li class="single-card__item">  <a style="margin-left: 2.5em" href="{% url 'recipe_delete' username=recipe.author.username recipe_id=recipe.id %}" class="single-card__text">Удалить рецепт</a></li>
                         {% endif %}
                     </ul>
                 </div>
