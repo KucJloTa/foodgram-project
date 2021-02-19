@@ -59,3 +59,8 @@ def get_count_recipes(author):
         end = 'рецептов'
 
     return f'Еще {count} {end}...'
+
+
+@register.filter(name='shopping_count')
+def shopping_count(request, user_id):
+    return ShopingList.objects.filter(user=user_id).count()
