@@ -23,11 +23,17 @@ class Subscribe {
         target.setAttribute('disabled', true)
         this.api.removeSubscriptions(authorId)
             .then( e => {
-                target.innerHTML = this.config.default.text;
-                target.classList.add(this.config.default.class);
-                target.classList.remove(this.config.active.class);
-                target.setAttribute(this.config.attr, true);
-            })
+                let isSubscriptions = document.getElementById('subscriptions') != null;
+                if(isSubscriptions)
+                {
+                    target.closest(".card-user").remove();
+                }
+                else{
+                    target.innerHTML = this.config.default.text;
+                    target.classList.add(this.config.default.class);
+                    target.classList.remove(this.config.active.class);
+                    target.setAttribute(this.config.attr, true);
+            }})
             .catch( e => {
                 console.log(e)
             })
