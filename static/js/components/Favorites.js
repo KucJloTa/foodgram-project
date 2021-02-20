@@ -8,8 +8,8 @@ class Favorites {
         target.setAttribute('disabled', true)
         this.api.addFavorites(cardId)
             .then( e => {
-                target.innerHTML = this.config.active.text;
-                target.removeAttribute(this.config.attr);
+                target.innerHTML = this.config.default.text;
+                target.setAttribute(this.config.attr, true);
                 callBack&&callBack()
             })
             .finally(e => {
@@ -20,8 +20,8 @@ class Favorites {
         target.setAttribute('disabled', true)
         this.api.removeFavorites(cardId)
             .then( e => {
-                target.innerHTML = this.config.default.text;
-                target.setAttribute(this.config.attr, true);
+                target.innerHTML = this.config.active.text;
+                target.removeAttribute(this.config.attr);
                 callBack&&callBack()
             })
             .finally(e => {
