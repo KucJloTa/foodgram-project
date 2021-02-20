@@ -130,6 +130,7 @@ def recipe_edit(request, username, recipe_id):
 
     form = RecipeForm(request.POST or None,
                       files=request.FILES or None, instance=recipe)
+                      
 
     return render(request, 'recipe_edit.html',
                   {'form': form, 'recipe': recipe, })

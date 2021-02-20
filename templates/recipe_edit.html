@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Создание рецепта{% endblock %}
+{% block title %}Редактирование рецепта{% endblock %}
 
 {% load static %}
 {% block static %}
@@ -60,7 +60,7 @@
                         <label for="cantidad" class="form__label" id="cantidadVal">шт.</label>
                     </div>
                     <div class="form__field-group-ingredientes-container">
-                        {% for in in ingr %}
+                        {% for in in recipe.recipe.all %}
                             <div class="form__field-item-ingredient" id="{{ in.pk }}">
                                 <span>{{ in.ingredient.title }} {{ in.amount }}{{ in.ingredient.dimension }}</span>
                                 <span class="form__field-item-delete" ></span>
