@@ -1,12 +1,11 @@
 from django import forms
 from django.forms import CheckboxSelectMultiple
 
-from .models import Recipe
+from .models import Recipe, IngredientRecipe
 
 
 class RecipeForm(forms.ModelForm):
 
-    # amount = forms.IntegerField(min_value=1)
 
     class Meta:
         model = Recipe
@@ -21,3 +20,9 @@ class RecipeForm(forms.ModelForm):
         widgets = {
             'tag': CheckboxSelectMultiple(),
         }
+
+class IngredientRecipeForm(forms.ModelForm):
+
+    class Meta:
+        model = IngredientRecipe
+        fields = ['amount',]
