@@ -35,11 +35,16 @@ def index(request):
     paginator = Paginator(recipe_list, ITEMS_FOR_PAGINATOR)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
+    tags = ['breakfast', 'lunch', 'dinner']
+    color = ['green', 'orange', 'purple']
+    name = ['Затрак', 'Обед', 'Ужин']
+    result = list(zip(tags, name, color))
     return render(
         request, 'index.html', {
             'page': page,
             'paginator': paginator,
-            'food_time': food_time
+            'food_time': food_time,
+            'result': result
         }
     )
 
