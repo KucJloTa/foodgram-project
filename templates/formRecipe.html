@@ -41,11 +41,7 @@
                             <label for="id_dinner" class="tags__label">Ужин</label>
                         </div>
                     </div>
-                    {% for error in form.errors %}
-                    <span class="form__error">
-                        {{ error }}
-                    </span>
-                    {% endfor %}
+                    <span class="form__error">{{ form.tags.errors }}</span>
                 </div>
             </div>
             <div class="form__group">
@@ -71,10 +67,8 @@
                         {% endfor %}
                     </div>
                     <span class="form__ingredient-link" id="addIng">Добавить ингредиент</span>
-                    {% for error in form.errors %}
-                    <span class="form__error">
-                        {{ error }}
-                    </span>
+                    {% for error in form.non_field_errors %}
+                    <span class="form__error">{{ error|escape }}</span>
                     {% endfor %}
                 </div>
             </div>
