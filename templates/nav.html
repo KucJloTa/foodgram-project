@@ -8,8 +8,7 @@
                   <li class="nav__item {% if follow %} nav__item_active {% endif %}"><a href="{% url 'follow' %}" class="nav__link link">Подписки</a></li>
                   <li class="nav__item {% if new_recipe %} nav__item_active {% endif %}"><a href="{% url 'new_recipe' %}" class="nav__link link">Создать рецепт</a></li>
                   <li class="nav__item {% if favorite %} nav__item_active {% endif %}"><a href="{% url 'favorite' %}" class="nav__link link">Избранное</a></li> 
-                  <li class="nav__item {% if user|shopping_count:user.id > 0 %} nav__item_active disabled {% endif %} {% if purchases %} nav__item_active {% endif %}"><a href="{% url 'shopping-list' %}" class="nav__link link">Список покупок</a>
-                    <span class="badge badge_style_blue nav__badge" id="counter">{% if user|shopping_count:user.id %} {{ user|shopping_count:user.id }} {% endif %} </span></li>
+                  <li class="nav__item{% if user|shopping_count:user.id > 0 %}nav__item_active disabled{% endif %}{% if purchases %}nav__item_active{% endif %}"><a href="{% url 'shopping-list' %}" class="nav__link link">Список покупок</a><span class="badge badge_style_blue nav__badge" id="counter">{% if user|shopping_count:user.id %}{{ user|shopping_count:user.id }}{% endif %}</span></li>
               </ul>
               <ul class="nav__items list">
                   <li class="nav__item {% if password_change %} nav__item_active {% endif %}"><a href="{% url 'password_change' %}" class="nav__link link">Сменить пароль</a></li>
