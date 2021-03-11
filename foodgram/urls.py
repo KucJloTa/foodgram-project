@@ -35,7 +35,7 @@ urlpatterns = [
     path('', include('recipes.urls')),
     path('about/author/', views.author, name='author'),
     path('about/tech/', views.tech, name='tech'),
-    path('__debug__/', include(debug_toolbar.urls)),
+#    path('__debug__/', include(debug_toolbar.urls)),
 ]
 
 if settings.DEBUG:
