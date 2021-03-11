@@ -7,18 +7,18 @@ register = template.Library()
 
 @register.filter(name='get_filter_values')
 def get_filter_values(value):
-    return value.getlist('filter')
+    return value.getlist('filters')
 
 
 @register.filter(name='get_filter_link')
 def get_filter_link(request, food_time):
     new_request = request.GET.copy()
-    if food_time in request.GET.getlist('filter'):
-        filters = new_request.getlist('filter')
+    if food_time in request.GET.getlist('filters'):
+        filters = new_request.getlist('filters')
         filters.remove(food_time)
-        new_request.setlist('filter', filters)
+        new_request.setlist('filters', filters)
     else:
-        new_request.appendlist('filter', food_time)
+        new_request.appendlist('filters', food_time)
     return new_request.urlencode()
 
 

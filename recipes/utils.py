@@ -1,3 +1,6 @@
+from django.db.models import Q
+
+
 def get_ingredients(request):
     ingredients = {}
     for key in dict(request.POST.items()):
@@ -15,14 +18,11 @@ def food_time_filter(request, queryset):
         'lunch': (True, False),
         'dinner': (True, False)
     }
-    food_time = request.GET.get('filter')
+    food_time = request.GET.getlist('filters')
+    for i in food_time:
+        if i in food:
+            food[i] = (True,)
 
-    if food_time in food:
-        food[food_time] = (True,)
-
-    queryset_new = queryset.filter(
-        breakfast__in=food['breakfast'],
-        lunch__in=food['lunch'],
-        dinner__in=food['dinner'])
+    queryset_new = queryset.filter(Q(breakfast__in=food['breakfast']) | Q(lunch__in=food['lunch']) | Q(dinner__in=food['dinner'])).distinct()
 
     return queryset_new, food_time
