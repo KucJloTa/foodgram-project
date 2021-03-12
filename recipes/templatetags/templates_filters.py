@@ -64,3 +64,9 @@ def get_count_recipes(author):
 @register.filter(name='shopping_count')
 def shopping_count(request, user_id):
     return ShopingList.objects.filter(user=user_id).count()
+
+@register.filter
+def url_with_get(request, page):
+    query = request.GET.copy()
+    query['page'] = page
+    return query.urlencode()
